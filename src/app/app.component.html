@@ -1,0 +1,61 @@
+<div class="container-sluid">
+  <h1>Form Field</h1>
+  <div *ngIf="errorMsg">
+    {{errorMsg}}
+  </div>
+  <form #field="ngForm" *ngIf="!submitted" (ngSubmit)="onSubmit()" novalidate>
+
+    <div class="group">
+      <label>Nume</label>
+      <input type="text" required #name="ngModel" [class.is-invalid]="name.invalid && name.touched" class="form-control" name="userName" [(ngModel)]="userModel.name">
+      <small class="text-danger" [class.d-none]="name.valid || name.untouched">Introdu numele</small>
+    </div>
+
+    <div class="group">
+      <label>Email</label>
+      <input type="email" #email="ngModel" required [class.is-invalid]="email.invalid && email.touched" class="form-control"  name="email" [ngModel]="userModel.email">
+      <small class="text-danger" [class.d-none]="email.valid || email.untouched">Introdu Emailul</small>
+    </div>
+
+    <div class="group">
+      <label>Telefon</label>
+      <input type="tel" #phone="ngModel" pattern="^\d{10}$" required [class.is-invalid]="phone.invalid && phone.touched" class="form-control"  name="phone" [ngModel]="userModel.phone">
+        <small class="text-danger" [class.d-none]="phone.valid || phone.untouched">Introdu telefonu</small>
+      <div *ngIf="phone.errors && (phone.invalid || phone.touched)">
+        <small class="text-danger" *ngIf="phone.errors.pattern">Trebuie sa contina 10 cifre</small>
+      </div>
+
+
+    </div> 
+
+    <div class="group">
+      <select (blur)="validateTopic(topic.value)" (change)="validateTopic(topic.value)" #topic="ngModel" [class.is-invalid]="topicHasError && topic.touched" class="custom" name="topic" [ngModel]="userModel.topic">
+        <option value="default">Ma intereseaza</option>
+        <option *ngFor="let topic of topics">{{ topic }}</option>
+      </select>
+      <small class="text-danger" [class.d-none]="!topicHasError || topic.untouched">Alege ceva</small>
+    </div>
+
+    <div class="gropu">
+      <label class="sentance">Perioada de timp preferata</label>
+      <div class="form-check">
+        <input class="input-check" [ngModel]="userModel.timePreference" type="radio" name="timePreference" value="morning">
+        <label class="check-label">Dimineata (9am - 8pm)</label>
+      </div>
+      <div class="form-check">
+        <input class="input-check" [ngModel]="userModel.timePreference" type="radio" name="timePreference" value="evening">
+        <label class="check-label">Seara (9am - 8pm)</label>
+      </div>
+    </div>
+    
+    <div class="group">
+      <input class="check-input"  name="subscribe" [ngModel]="userModel.subscribe" type="checkbox">
+      <label class="check-label">
+        Trimite-mi oferte promotionale
+      </label>
+    </div>
+    
+     <button [disabled]="field.form.invalid || topicHasError" class="btn" type="submit">Submit form</button>
+  
+  </form>
+</div>
